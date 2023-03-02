@@ -1,0 +1,14 @@
+.wrapper {
+  border: 1px solid gray;
+  background-color: rgb(255, 255, 255);
+  width: 50%;
+  border-radius: 8px;
+  margin: 0 0 2% 5%;
+  padding: 5px;
+
+  div {
+    span {
+      font-weight: 700;
+    }
+  }
+}
