@@ -4,7 +4,9 @@ import {
   GET_NEWS,
   SET_LATEST_NEWS,
   SET_POPULAR_NEWS,
-} from "../constants";
+  SET_POPULAR_NEWS_ERROR,
+  SET_LATEST_NEWS_ERROR,
+} from '../constants';
 
 export const increaseCount = () => ({
   type: INCREASE_COUNT,
@@ -26,4 +28,14 @@ export const setPopularNews = (payload) => ({
 
 export const getNews = () => ({
   type: GET_NEWS,
+});
+
+export const setLatestNewsError = (payload) => ({
+  type: SET_LATEST_NEWS_ERROR,
+  payload,
+});
+
+export const setPopularNewsError = (payload) => ({
+  type: SET_POPULAR_NEWS_ERROR,
+  payload,
 });

@@ -1,9 +1,10 @@
-import React from "react";
-import User from "./components/User";
+import React from 'react';
+import User from './components/User';
 
-const UsersContainer = ({ news }) => {
+const UsersContainer = ({ news, title }) => {
   return (
     <>
+      {news?.length > 0 && <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>{title}</div>}
       {news &&
         news.map((item, id) => {
           return (

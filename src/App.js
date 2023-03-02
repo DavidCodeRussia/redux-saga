@@ -1,10 +1,13 @@
-import { useSelector, useDispatch } from "react-redux";
-import { increaseCount, decreaseCount, getNews } from "./redux/actions/actionCreator";
-import UsersContainer from "./components/UsersContainer";
+import { useSelector, useDispatch } from 'react-redux';
+import { increaseCount, decreaseCount, getNews } from './redux/actions/actionCreator';
+import UsersContainer from './components/UsersContainer';
 
 const App = () => {
   const count = useSelector((store) => store?.counter?.count);
-  const news = useSelector((store) => store?.news?.latestNews);
+  const latestNews = useSelector((store) => store?.news?.latestNews);
+  const popularNews = useSelector((store) => store?.news?.popularNews);
+  const errorLatest = useSelector((store) => store?.errors?.latestNewsError);
+  const errorPopular = useSelector((store) => store?.errors?.popularNewsError);
   const dispatch = useDispatch();
 
   const handleIncrease = () => {
@@ -26,7 +29,18 @@ const App = () => {
       <button onClick={handleNews}>Get News</button>
 
       <h1>{count}</h1>
-      <UsersContainer news={news} />
+
+      {errorLatest?.length > 0 ? (
+        <div style={{ color: 'red', fontWeight: 'bold' }}>{errorLatest}</div>
+      ) : (
+        <UsersContainer news={latestNews} title={'latestNews'} />
+      )}
+
+      {errorPopular?.length > 0 ? (
+        <div style={{ color: 'red', fontWeight: 'bold' }}>{errorPopular}</div>
+      ) : (
+        <UsersContainer news={popularNews} title={'popularNews'} />
+      )}
     </div>
   );
 };
