@@ -1,17 +1,27 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import createSagaMiddleWare from "redux-saga";
-import reducer from "./reducers";
-import rootSaga from "./sagas";
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import createSagaMiddleWare from 'redux-saga';
+import rootSaga from './sagas';
+import news from './reducers/news';
+import errors from './reducers/errors';
+import router from './reducers/router';
 
 const sagaMiddleWare = createSagaMiddleWare();
 
 const composeEnhancers =
-  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
 const configureStore = (preloadedState) =>
-  createStore(reducer, preloadedState, composeEnhancers(applyMiddleware(sagaMiddleWare)));
+  createStore(
+    combineReducers({
+      news,
+      errors,
+      router,
+    }),
+    preloadedState,
+    composeEnhancers(applyMiddleware(sagaMiddleWare)),
+  );
 
 const store = configureStore({});
 

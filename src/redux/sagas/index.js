@@ -1,5 +1,4 @@
-import { takeEvery, put, call, fork, all, race, spawn } from '@redux-saga/core/effects';
-import { GET_NEWS } from '../constants';
+import { takeEvery, put, call, fork, all, race, spawn, select } from '@redux-saga/core/effects';
 import { getLatestNews, getPopularNews } from '../../api';
 import {
   setLatestNews,
@@ -7,6 +6,7 @@ import {
   setLatestNewsError,
   setPopularNewsError,
 } from '../actions/actionCreator';
+import { LOCATION_CHANGED } from '../constants';
 
 export function* handleLatestNews() {
   try {
@@ -26,17 +26,20 @@ export function* handlePopularNews() {
   }
 }
 
-export function* handleNews() {
-  yield spawn(handleLatestNews);
-  yield spawn(handlePopularNews);
-}
+// export function* watchLatestSaga() {
+//   yield takeEvery(GET_LATEST_NEWS, handleLatestNews);
+// }
 
-export function* watchClickSaga() {
-  yield takeEvery(GET_NEWS, handleNews);
+export function* watchNewsSaga() {
+  const path = yield select((state) => state.router);
+
+  if (path === '/popular-news') {
+    console.log('popular-news');
+  }
 }
 
 export default function* rootSaga() {
-  yield watchClickSaga();
+  yield takeEvery(LOCATION_CHANGED, watchNewsSaga);
 }
 
 // takeEvery - срабатывает при каждом нажатии кнопки
@@ -50,3 +53,4 @@ export default function* rootSaga() {
 // и только тогда возвращает результат. Если хоть один из запросов упадет all не вернет вообще ничего.
 
 // spawn создает параллельную задачу в корне саги и не привязывает её к родителю (не блокирующий, как и fork)
+// fork привязывает процессы к родителю
