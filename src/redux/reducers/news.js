@@ -1,8 +1,9 @@
-import { SET_LATEST_NEWS, SET_POPULAR_NEWS } from '../constants';
+import { SET_LATEST_NEWS, SET_POPULAR_NEWS, SET_LOADING } from '../constants';
 
 const initialState = {
   latestNews: [],
   popularNews: [],
+  loading: false,
 };
 
 const news = (state = initialState, { type, payload }) => {
@@ -16,6 +17,11 @@ const news = (state = initialState, { type, payload }) => {
       return {
         ...state,
         popularNews: payload,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: payload,
       };
     default:
       return state;

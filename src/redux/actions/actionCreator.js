@@ -3,6 +3,7 @@ import {
   SET_POPULAR_NEWS,
   SET_POPULAR_NEWS_ERROR,
   SET_LATEST_NEWS_ERROR,
+  SET_LOADING,
 } from '../constants';
 
 export const setLatestNews = (payload) => ({
@@ -22,5 +23,10 @@ export const setLatestNewsError = (payload) => ({
 
 export const setPopularNewsError = (payload) => ({
   type: SET_POPULAR_NEWS_ERROR,
+  payload,
+});
+
+export const setLoading = (payload) => ({
+  type: SET_LOADING,
   payload,
 });

@@ -1,17 +1,20 @@
-import { takeEvery, put, call, fork, all, race, spawn, select } from '@redux-saga/core/effects';
+import { takeEvery, put, call, fork, all, debounce, join } from '@redux-saga/core/effects';
 import { getLatestNews, getPopularNews } from '../../api';
 import {
   setLatestNews,
   setPopularNews,
   setLatestNewsError,
   setPopularNewsError,
+  setLoading,
 } from '../actions/actionCreator';
-import { LOCATION_CHANGED } from '../constants';
+import { GET_LATEST_NEWS, GET_POPULAR_NEWS } from '../constants';
 
 export function* handleLatestNews() {
   try {
+    yield put(setLoading(true));
     const { children } = yield call(getLatestNews, 'items');
     yield put(setLatestNews(children));
+    yield put(setLoading(false));
   } catch {
     yield put(setLatestNewsError('Error fetching latest news '));
   }
@@ -19,27 +22,30 @@ export function* handleLatestNews() {
 
 export function* handlePopularNews() {
   try {
+    yield put(setLoading(true));
     const { children } = yield call(getPopularNews);
     yield put(setPopularNews(children));
+    yield put(setLoading(false));
   } catch {
     yield put(setPopularNewsError('Error fetching popular news '));
   }
 }
 
-// export function* watchLatestSaga() {
-//   yield takeEvery(GET_LATEST_NEWS, handleLatestNews);
-// }
+export function* watchPopularSaga() {
+  yield takeEvery(GET_POPULAR_NEWS, handlePopularNews);
+}
 
-export function* watchNewsSaga() {
-  const path = yield select((state) => state.router);
+export function* watchLatestSaga() {
+  yield takeEvery(GET_LATEST_NEWS, handleLatestNews);
+}
 
-  if (path === '/popular-news') {
-    console.log('popular-news');
-  }
+export function* loadTets() {
+  const { children } = yield call(getPopularNews);
+  return children;
 }
 
 export default function* rootSaga() {
-  yield takeEvery(LOCATION_CHANGED, watchNewsSaga);
+  yield all([fork(watchPopularSaga), fork(watchLatestSaga)]);
 }
 
 // takeEvery - срабатывает при каждом нажатии кнопки
